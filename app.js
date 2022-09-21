@@ -6,12 +6,12 @@ const User = require("./models/user");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-// const {JWT_SECRET,MOGOURI} = require('./config/keys')
+const { JWT_SECRET, MOGOURI, PORT } = require("./config/keys");
 const Todo = require("./models/todo");
 require("dotenv/config");
-const JWT_SECRET = process.env.JWT_SECRET;
-const MOGOURI = process.env.MOGOURI;
-const PORT = process.env.PORT;
+// const JWT_SECRET = process.env.JWT_SECRET;
+// const MOGOURI = process.env.MOGOURI;
+// const PORT = process.env.PORT;
 
 mongoose.connect(MOGOURI, {
   useNewUrlParser: true,
@@ -109,14 +109,14 @@ app.delete("/remove/:id", requireLogin, async (req, res) => {
   res.status(200).json({ message: removedTodo });
 });
 
-// if (process.env.NODE_ENV == "production") {
-const path = require("path");
+if (process.env.NODE_ENV == "production") {
+  const path = require("path");
 
-app.get("/", (req, res) => {
-  app.use(express.static(path.resolve(__dirname, "client", "build")));
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
-// }
+  app.get("/", (req, res) => {
+    app.use(express.static(path.resolve(__dirname, "client", "build")));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log("server running on ", PORT);
